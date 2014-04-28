@@ -1,5 +1,8 @@
 ######## This experiment has been tested on Ubuntu 12.04 and Nexus 5. ########
 
+Contact: Dongli Zhang
+Email:   dongli.zhang0129@gmail.com
+
 This is an example of decompiling and rebuilding the Android app.
 The name of our app is called LoginApp.apk. To login the app, you need to input the username and registration code.
 This doc is about how to break this registration process.
