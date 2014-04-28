@@ -1,0 +1,46 @@
+######## This experiment has been tested on Ubuntu 12.04 and Nexus 5. ########
+
+This is an example of decompiling and rebuilding the Android app.
+The name of our app is called LoginApp.apk. To login the app, you need to input the username and registration code.
+This doc is about how to break this registration process.
+We can download the related tool from Internet. I also upload a copy to the tool folder.
+
+1. Download apktool from https://code.google.com/p/android-apktool. You will have:
+(1) apktool1.5.2.tar.bz2 (apktool.jar)
+(2) apktool-install-linux-r05-ibot.tar.bz2 (aapt and apktool)
+Put all of above in the same folder (e.g. bin).
+
+2. Download signature tool from http://www.adbtoolkit.com/kitchen/tools/linux/#.U17E8B-Pg7z.
+(1) signapk.jar
+(2) signapk-README.txt
+(3) testkey.pk8
+(4) testkey.x509.pem
+Put all of above in the same folder (e.g. bin).
+
+3. Find LoginApp.apk in app folder. This is the app we want to break.
+
+4. Run the following command to decompile the app:
+    ./apktool d LoginApp.apk
+You will have a LoginApp folder.
+
+5. Run
+    vim LoginApp/smali/com/zhang/loginapp/LoginActivity\$1.smali
+As we want to bypass the registration process, we need to modify the smali code of LoginApp.
+
+6. Goto line 99 and find the following smali code:
+    .line 36
+    if-nez v0, :cond_0
+If the v0 is not equal, the program will goto cond_0 and fail the registration.
+We change if-nez to if-eqz, like followling:
+    .line 36
+    if-eqz v0, :cond_0
+
+7. Run the following command to rebuild the changed app:
+    ./apktool b LoginApp ChangedApp.apk
+
+8. Run the following command to sign the changed app:
+    java -jar signapk.jar testkey.x509.pem testkey.pk8 ChangedApp.apk SignedApp.apk
+
+9. The SignedApp.apk is the final generated app. You can install it on your Android (I use Nexus 5).
+You can bypass the registration process now.
+
